@@ -16,7 +16,7 @@ if (isset($_POST['login'])) {
         set_error_message("Username dan password harus diisi.");
     }
 
-    $stmt = $db->prepare("SELECT username, password FROM users WHERE username = ?");
+    $stmt = $db->prepare("SELECT id, username, password FROM users WHERE username = ?");
     if (!$stmt) {
         die("Query error: " . $db->error);
     }
@@ -29,7 +29,10 @@ if (isset($_POST['login'])) {
         if (md5($passwordin) === $user['password']) {
             session_regenerate_id(true);
             $_SESSION["username"] = $user["username"];
+            $_SESSION["user_id"] = $user["id"];
             $_SESSION["is_login"] = true;
+
+            
             header("Location: ../dashboard/index.php");
             exit();
          } else {

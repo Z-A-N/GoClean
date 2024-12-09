@@ -169,9 +169,11 @@
                                 <h5 class="card-title"><?php echo $row['nama']; ?></h5>
                                 <p class="card-text">Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></p>
                                 <form action="to_cart.php" method="POST">
-                                    <input type="hidden" name="p_input" value="<?php echo $row['id']; ?>">
-                                    <button type="submit" name="submit" class="btn btn-primary">Add to Cart</button>
+                                  <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                  <button type="submit" name="submit" class="btn btn-primary">Add to Cart</button>
                                 </form>
+
+
 
                             </div>
                         </div>

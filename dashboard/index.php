@@ -5,9 +5,15 @@
     header('Location: ../account/index.php');
     exit();
 }
-
    $sql = "SELECT * FROM products";
    $result = $connection->query($sql);
+   $user_id = $_SESSION['user_id'];
+
+
+$total_items = "SELECT SUM(kuantitas) AS total_items FROM cart WHERE user_id = $user_id";
+$result_total_items = mysqli_query($connection, $total_items);
+$row = mysqli_fetch_assoc($result_total_items);
+$total_items = $row['total_items'] ? $row['total_items'] : 0;
 ?>
 
 <!doctype html>
@@ -63,9 +69,17 @@
 
                 <!-- Navbar Right: Keranjang dan Login -->
                 <div class="d-flex ms-auto">
-                    <a href="keranjang" class="btn btn-outline-secondary me-2 position-relative">
+                    <button class="btn btn-outline-secondary me-2 position-relative" data-bs-toggle="modal"
+                        data-bs-target="#cartModal" aria-label="Lihat Keranjang">
                         <i class="fas fa-shopping-cart"></i>
-                    </a>
+                        <?php if ($total_items > 0): ?>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?php echo $total_items; ?>
+                            <span class="visually-hidden">Total Items</span>
+                        </span>
+                        <?php endif; ?>
+                    </button>
+
 
                     <a href="login" class="btn btn-outline-secondary">
                         <i class="fas fa-user"></i>
@@ -75,6 +89,52 @@
         </div>
     </nav>
 
+    <!-- Modal Keranjang -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" style="max-width: 500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Keranjang Anda</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Menampilkan daftar produk di keranjang -->
+                    <?php
+                $sql_cart = "SELECT p.nama, p.harga, c.kuantitas, p.gambar 
+                             FROM cart c
+                             JOIN products p ON c.product_id = p.id
+                             WHERE c.user_id = $user_id";
+                $result_cart = mysqli_query($connection, $sql_cart);
+
+                if (mysqli_num_rows($result_cart) > 0) {
+                    while ($cart_item = mysqli_fetch_assoc($result_cart)) {
+                        ?>
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <img src="admin/uploads/<?php echo $cart_item['gambar']; ?>"
+                                alt="<?php echo $cart_item['nama']; ?>" class="img-fluid"
+                                style="height: 80px; object-fit: cover;">
+                        </div>
+                        <div class="col-8">
+                            <h6><?php echo $cart_item['nama']; ?></h6>
+                            <p>Rp <?php echo number_format($cart_item['harga'], 0, ',', '.'); ?></p>
+                            <p>Jumlah: <?php echo $cart_item['kuantitas']; ?></p>
+                        </div>
+                    </div>
+                    <?php
+                    }
+                } else {
+                    echo "<p>Keranjang Anda kosong.</p>";
+                }
+                ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <a href="cart.php" class="btn btn-primary">Lihat Keranjang</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Untuk dashboard bagian atas -->
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
@@ -146,7 +206,7 @@
                             <p class="card-text">Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></p>
                             <form action="to_cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
-                              
+
                                 <div class="input-group mb-2 justify-content-center d-flex align-items-center">
                                     <button type="button" class="btn btn-outline-secondary"
                                         onclick="decrementQuantity(<?php echo $row['id']; ?>)">
@@ -158,7 +218,7 @@
                                         onclick="incrementQuantity(<?php echo $row['id']; ?>)">
                                         <i class="ri-add-fill"></i> <!-- Icon plus -->
                                     </button>
-                                    </div>
+                                </div>
                                 <button type="submit" name="submit" class="btn btn-primary">Add to Cart</button>
                             </form>
                         </div>

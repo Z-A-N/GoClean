@@ -26,6 +26,3 @@ function incrementQuantity(productId) {
   quantityInput.value = currentQuantity + 1;
 }
 
-
-
-

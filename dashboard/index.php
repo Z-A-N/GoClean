@@ -27,7 +27,7 @@ $total_items = $row['total_items'] ? $row['total_items'] : 0;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> 
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
@@ -81,7 +81,7 @@ $total_items = $row['total_items'] ? $row['total_items'] : 0;
                     </button>
 
 
-                    <a href="login" class="btn btn-outline-secondary">
+                    <a href="../account/profile/index.php" class="btn btn-outline-secondary">
                         <i class="fas fa-user"></i>
                     </a>
                 </div>
@@ -191,9 +191,9 @@ $total_items = $row['total_items'] ? $row['total_items'] : 0;
     </section>
 
     <!-- Item Produk -->
-    <section id="products" class="section-padding bg-light">
+    <section id="services" class="section-padding bg-light">
         <div class="container mt-5">
-            <h1 class="text-center">Product List</h1>
+            <h1 class="text-center">Cuci Kilat</h1>
             <div class="row">
                 <?php while ($row = mysqli_fetch_assoc($result)): ?>
                 <div class="col-md-4 mb-4">

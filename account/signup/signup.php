@@ -8,6 +8,9 @@ if (isset($_POST["signup"])) {
     $usernameup = trim($_POST["usernameup"]);
     $emailup = trim($_POST["emailup"]);
     $passwordup = trim($_POST["passwordup"]);
+    $namaD = trim($_POST["namaD"]);
+    $namaB = trim($_POST["namaB"]);
+    $nomer = trim($_POST["nomer"]);
 
     if (empty($usernameup) || empty($emailup) || empty($passwordup)) {
         set_error_message("Semua field harus diisi.");
@@ -32,15 +35,16 @@ if (isset($_POST["signup"])) {
         set_error_message("Username atau email sudah terdaftar.");
     } else {
         // Insert new user
-        $stmt = $db->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+        $stmt = $db->prepare("INSERT INTO users (username, email, password, nama_depan, nama_belakang, nomer) VALUES (?, ?, ?, ?, ?, ?)");
         if (!$stmt) {
             die("Query error: " . $db->error);
         }
-        $stmt->bind_param("sss", $usernameup, $emailup, $hashed_password);
+        $stmt->bind_param("ssssss", $usernameup, $emailup, $hashed_password, $namaD, $namaB, $nomer);
 
         if ($stmt->execute()) {
             session_regenerate_id(true);
-
+            
+            $_SESSION["user_id"] = $user_id;
             $_SESSION["username"] = $usernameup;
             $_SESSION["is_login"] = true;
 

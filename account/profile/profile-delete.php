@@ -7,15 +7,17 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+$id = $_SESSION['user_id'];
+ 
 
-$user_id = $_SESSION['user_id'];
-$user_id = $_POST['id'];
-
-$delete = "DELETE FROM users WHERE id = $cart_id AND user_id = $user_id";
-if (mysqli_query($db, $delete)) {
-    header('Location: index.php');
-    exit();
+$query_cart = "DELETE FROM cart WHERE user_id = $id";
+mysqli_query($db, $query_cart);
+$query = "DELETE FROM users WHERE id = $id";
+if (mysqli_query($db, $query)) {
+header('Location:../');
+exit();
 } else {
-    echo "Gagal menghapus item dari keranjang.";
+echo "Error: " . mysqli_error($db);
 }
+
 ?>

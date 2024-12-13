@@ -7,6 +7,19 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+$user_id = $_SESSION['user_id'];
+
+// Query langsung tanpa prepared statement
+$sql = "SELECT username, nama_depan, nama_belakang, nomer, email FROM users WHERE id = $user_id";
+$result = $db->query($sql);
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc(); // Ambil data pengguna
+} else {
+    echo "Data pengguna tidak ditemukan.";
+    exit();
+}
+
 if (isset($_POST['submit'])) {
     $id = $_SESSION['user_id'];
     $namaD = $_POST["namadepan"];
@@ -184,7 +197,7 @@ button:hover::before {
                     <div class="col-sm-4 bg-info rounded-left">
                         <div class="card-block text-center text-white">
                             <i class="fas fa-user-tie fa-7x mt-5"></i>
-                            <h2 class="font-weight-bold mt-4">Haruto</h2>
+                            <h2 class="font-weight-bold mt-4"><?php echo $user['username']; ?></h2>
                             <p>Customer</p>
                         </div>
                     </div>

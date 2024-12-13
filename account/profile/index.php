@@ -1,13 +1,24 @@
 <?php
 session_start();
 include '../database.php';
+
 if (!isset($_SESSION['user_id'])) {
- header('Location: ../account/index.php');
- exit();
+    header('Location: ../account/index.php');
+    exit();
 }
-$sql = "SELECT * FROM users";
-$result = $db->query($sql);
+
 $user_id = $_SESSION['user_id'];
+
+// Query langsung tanpa prepared statement
+$sql = "SELECT username, nama_depan, nama_belakang, nomer, email FROM users WHERE id = $user_id";
+$result = $db->query($sql);
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc(); // Ambil data pengguna
+} else {
+    echo "Data pengguna tidak ditemukan.";
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -108,7 +119,7 @@ button:hover {
                     <div class="col-sm-4 bg-info rounded-left">
                         <div class="card-block text-center text-white">
                             <i class="fas fa-user-tie fa-7x mt-5"></i>
-                            <h2 class="font-weight-bold mt-4">Haruto</h2>
+                            <h2 class="font-weight-bold mt-4"><?php echo $user['username']; ?></h2>
                             <p>Customer</p>
                         </div>
                     </div>
@@ -121,13 +132,13 @@ button:hover {
                             <p class="font-weight-bold">
                             <i class="ri-user-line" style="margin-right: 8px; position: relative; top: 2px;"></i>Nama Depan:
                             </p>
-                                <h6 class="text-muted">Haruto</h6>
+                                <h6 class="text-muted"><?php echo $user['nama_depan']; ?></h6>
                             </div>
                             <div class="col-sm-6">
                                 <p class="font-weight-bold">
                                 <i class="ri-user-star-line" style="margin-right: 8px; position: relative; top: 2px;"></i>Nama Depan:
                             </p>
-                                <h6 class="text-muted">Watanabe</h6>
+                                <h6 class="text-muted"><?php echo $user['nama_belakang']; ?></h6>
                             </div>
                         </div>
                         <hr class="badge-primary mt-0 w-25">
@@ -136,13 +147,13 @@ button:hover {
                             <p class="font-weight-bold">
                                 <i class="ri-mail-line" style="margin-right: 8px; position: relative; top: 2px;"></i>Email:
                             </p>
-                            <h6 class="text-muted">2342@gmail.com</h6>
+                            <h6 class="text-muted"><?php echo $user['email']; ?></h6>
                         </div>
                         <div class="col-sm-6">
                             <p class="font-weight-bold">
                                 <i class="ri-phone-line" style="margin-right: 8px; position: relative; top: 2px;"></i>No Handphone:
                             </p>
-                            <h6 class="text-muted">08123456789</h6>
+                            <h6 class="text-muted"><?php echo $user['nomer']; ?></h6>
                         </div>
                         </div>
                         <hr class="bg-primary">

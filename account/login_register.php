@@ -50,8 +50,21 @@
           </div>
           <div class="input-field">
             <i class="fas fa-lock"></i>
+            <input type="text" name="namaD" placeholder="Nama Depan" />
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input type="text" name="namaB" placeholder="Nama Belakang" />
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input type="number" name="nomer" placeholder="nomer" />
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
             <input type="password" name="passwordup" placeholder="Password" />
           </div>
+          
           <input type="submit" name="signup" class="btn" value="Sign up" />
         </form>
       </div>

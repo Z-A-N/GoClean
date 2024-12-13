@@ -93,6 +93,10 @@ if (mysqli_num_rows($result) > 0) {
         <?php else: ?>
         <p>Keranjang Anda kosong.</p>
         <?php endif; ?>
+        <div class="mt-3">
+            <button onclick="history.back()" class="btn btn-primary">Kembali</button>
+        </div>
+        
     </div>
 </body>
 

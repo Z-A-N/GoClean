@@ -1,3 +1,14 @@
+<?php
+session_start();
+include '../database.php';
+if (!isset($_SESSION['user_id'])) {
+ header('Location: ../account/index.php');
+ exit();
+}
+$sql = "SELECT * FROM users";
+$result = $db->query($sql);
+$user_id = $_SESSION['user_id'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

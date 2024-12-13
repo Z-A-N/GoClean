@@ -1,22 +1,46 @@
 <?php
 session_start();
-include './account/database.php';
+include '../database.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: ../account/index.php');
     exit();
 }
-if (isset($_POST['submit'])){
-  $namaD = $_POST["namadepan"];
-  $namaB = $_POST["namabelakang"];
-  $email = $_POST["email"];
-  $nomer = $_POST["nomer"];
 
-  var_dump($_POST);
-  die;
+if (isset($_POST['submit'])) {
+    $id = $_SESSION['user_id'];
+    $namaD = $_POST["namadepan"];
+    $namaB = $_POST["namabelakang"];
+    $email = $_POST["email"];
+    $nomer = $_POST["nomer"];
 
+    // Cek apakah semua input kosong
+    if (empty($namaD) && empty($namaB) && empty($email) && empty($nomer)) {
+        // Jika semua input kosong, kembalikan ke halaman profil tanpa mengubah data
+        header('Location: index.php');
+        exit();
+    }
+
+    // Buat query update
+    $query = "UPDATE users SET 
+        nama_depan = '$namaD',
+        nama_belakang = '$namaB',
+        email = '$email',
+        nomer = '$nomer'
+        WHERE id = $id";
+
+    // Eksekusi query
+    if (mysqli_query($db, $query)) {
+        echo "Data berhasil diperbarui.";
+        header('Location: index.php');
+        exit();
+    } else {
+        // Jika query gagal, tampilkan error
+        echo "Error: " . mysqli_error($db);
+    }
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -169,8 +193,9 @@ button:hover::before {
                         <h4 class="mt-3">Nama Pengguna</h4>
                         <hr class="bg-primary">
                         <div class="row">
-                          <form action="" method="post">
+                          
                             <div class="col-sm-6">
+                            <form action="" method="post">
                             <p class="font-weight-bold">
                             <i class="ri-user-line" style="margin-right: 8px; position: relative; top: 2px;"></i>Nama Depan:
                             </p>
@@ -203,6 +228,7 @@ button:hover::before {
                             <a href="#">
                                 <button name="submit">Save</button>
                             </a>
+                            </form>
                             <a href="index.php"> 
 <button class="cta">
   <span>Back</span>
@@ -213,7 +239,6 @@ button:hover::before {
 </button>
 
                             </a>
-                            </form>
                         </div>
                     </div>
                 </div>

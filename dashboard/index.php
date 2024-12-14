@@ -9,7 +9,12 @@
    $user_id = $_SESSION['user_id'];
    $sql = "SELECT * FROM products";
    $result = $connection->query($sql);
-   $sql_orders = "SELECT * FROM orders";
+   $sql_orders = "
+    SELECT orders.*, products.nama AS produk_nama
+    FROM orders
+    INNER JOIN products ON orders.product_id = products.id
+    WHERE orders.user_id = $user_id
+";
    $result_orders = $connection->query($sql_orders);
 
 

@@ -19,6 +19,7 @@ $result = mysqli_query($connection, $sql);
 
 if (mysqli_num_rows($result) > 0) {
     $cart_items = [];
+    $product_ids = [];
     $total_price = 0;
     $total_produk = 0; // Hitung total jumlah produk
     while ($row = mysqli_fetch_assoc($result)) {
@@ -26,6 +27,7 @@ if (mysqli_num_rows($result) > 0) {
         $total_price += $row['total'];
         $total_produk += $row['kuantitas'];
         $cart_items[] = $row;
+        $product_ids[] = $row['product_id'];
     }
 } else {
     header('Location: keranjang.php');
@@ -44,18 +46,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $negara = mysqli_real_escape_string($connection, $_POST['negara']);
     $kode_pos = mysqli_real_escape_string($connection, $_POST['kode_pos']);
 
-    // Simpan data ke tabel orders
-    $query = "INSERT INTO orders (nama, nomor, email, metode, alamat1, alamat2, kota, provinsi, negara, kode_pos, total_produk, total_harga, user_id) 
-              VALUES ('$nama', '$telepon', '$email', '$metode', '$alamat1', '$alamat2', '$kota', '$provinsi', '$negara', '$kode_pos', '$total_produk', '$total_price', '$user_id')";
-    if (mysqli_query($connection, $query)) {
-        $order_id = mysqli_insert_id($connection);
+    $order_id = null; // Tambahkan default nilai awal untuk $order_id
 
-        // Simpan detail pesanan
+    foreach ($product_ids as $product_id) {
+        $query = "INSERT INTO orders (nama, nomor, email, metode, alamat1, alamat2, kota, provinsi, negara, kode_pos, total_produk, total_harga, user_id, product_id) 
+              VALUES ('$nama', '$telepon', '$email', '$metode', '$alamat1', '$alamat2', '$kota', '$provinsi', '$negara', '$kode_pos', '$total_produk', '$total_price', '$user_id', '$product_id')";
+        
+        if (mysqli_query($connection, $query)) {
+            $order_id = mysqli_insert_id($connection);
+        }
+    }
+
+    // Simpan detail pesanan
+    if ($order_id) { // Pastikan order_id sudah terbuat sebelum menyimpan detail pesanan
         foreach ($cart_items as $item) {
             $product_id = $item['product_id'];
             $kuantitas = $item['kuantitas'];
             $harga = $item['harga'];
-            $query = "INSERT INTO order_details (order_id, product_id, kuantitas) VALUES ('$order_id', '$product_id', '$kuantitas')";
+
+            $query = "INSERT INTO order_details (order_id, product_id, kuantitas) 
+                      VALUES ('$order_id', '$product_id', '$kuantitas')";
             mysqli_query($connection, $query);
         }
 
@@ -70,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = "Gagal memproses pesanan Anda. Silakan coba lagi.";
     }
 }
+
 ?>
 
 <!doctype html>

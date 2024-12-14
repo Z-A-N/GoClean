@@ -5,9 +5,12 @@
     header('Location: ../account/index.php');
     exit();
 }
+   
+   $user_id = $_SESSION['user_id'];
    $sql = "SELECT * FROM products";
    $result = $connection->query($sql);
-   $user_id = $_SESSION['user_id'];
+   $sql_orders = "SELECT * FROM orders";
+   $result_orders = $connection->query($sql_orders);
 
 
 $total_items = "SELECT SUM(kuantitas) AS total_items FROM cart WHERE user_id = $user_id";
@@ -79,8 +82,6 @@ $total_items = $row['total_items'] ? $row['total_items'] : 0;
                         </span>
                         <?php endif; ?>
                     </button>
-
-
                     <a href="../account/profile/index.php" class="btn btn-outline-secondary">
                         <i class="fas fa-user"></i>
                     </a>
@@ -228,6 +229,60 @@ $total_items = $row['total_items'] ? $row['total_items'] : 0;
             </div>
         </div>
     </section>
+
+    <!-- orders -->
+    <div class="container mt-5">
+        <h1 class="text-center">Order List</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nama</th>
+                        <th scope="col">Nama Produk</th>
+                        <th scope="col">Total Produk</th>
+                        <th scope="col">Total Harga</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+
+                    if (mysqli_num_rows($result_orders) > 0):
+                        while ($order = mysqli_fetch_assoc($result_orders)):
+                            $status_class = '';
+                            if ($order['status'] === 'Pending') {
+                                $status_class = 'status-pending';
+                            } elseif ($order['status'] === 'Completed') {
+                                $status_class = 'status-completed';
+                            } elseif ($order['status'] === 'Canceled') {
+                                $status_class = 'status-canceled';
+                            }
+                            ?>
+                            <tr>
+                                <td><?php echo $order['id']; ?></td>
+                                <td><?php echo $order['nama']; ?></td>
+                                <td><?php echo $order['produk_nama']; ?></td>
+                                <td><?php echo $order['total_produk']; ?></td>
+                                <td>Rp <?php echo number_format($order['total_harga'], 0, ',', '.'); ?></td>
+                                <td class="<?php echo $status_class; ?> text-center fw-bold">
+                                    <?php echo $order['status']; ?>
+                                </td>
+                            </tr>
+                            <?php
+                        endwhile;
+                    else:
+                        ?>
+                        <tr>
+                            <td colspan="6" class="text-center">Tidak ada pesanan.</td>
+                        </tr>
+                        <?php
+                    endif;
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <!-- FOOTER -->
     <footer class="bg-dark">

@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Query langsung tanpa prepared statement
+// Query untuk mengambil data pengguna
 $sql = "SELECT username, nama_depan, nama_belakang, nomer, email FROM users WHERE id = $user_id";
 $result = $db->query($sql);
 
@@ -22,16 +22,37 @@ if ($result->num_rows > 0) {
 
 if (isset($_POST['submit'])) {
     $id = $_SESSION['user_id'];
-    $namaD = $_POST["namadepan"];
-    $namaB = $_POST["namabelakang"];
-    $email = $_POST["email"];
-    $nomer = $_POST["nomer"];
 
-    // Cek apakah semua input kosong
-    if (empty($namaD) && empty($namaB) && empty($email) && empty($nomer)) {
-        // Jika semua input kosong, kembalikan ke halaman profil tanpa mengubah data
-        header('Location: index.php');
-        exit();
+    // Cek apakah input nama depan kosong
+    if (!empty($_POST["namadepan"])) {
+        $namaD = $_POST["namadepan"];
+    } else {
+        // Jika kosong, gunakan nama depan dari database
+        $namaD = $user['nama_depan'];
+    }
+
+    // Cek apakah input nama belakang kosong
+    if (!empty($_POST["namabelakang"])) {
+        $namaB = $_POST["namabelakang"];
+    } else {
+        // Jika kosong, gunakan nama belakang dari database
+        $namaB = $user['nama_belakang'];
+    }
+
+    // Cek apakah input email kosong
+    if (!empty($_POST["email"])) {
+        $email = $_POST["email"];
+    } else {
+        // Jika kosong, gunakan email dari database
+        $email = $user['email'];
+    }
+
+    // Cek apakah input nomor kosong
+    if (!empty($_POST["nomer"])) {
+        $nomer = $_POST["nomer"];
+    } else {
+        // Jika kosong, gunakan nomor dari database
+        $nomer = $user['nomer'];
     }
 
     // Buat query update

@@ -45,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode_pos = mysqli_real_escape_string($connection, $_POST['kode_pos']);
 
     // Simpan data ke tabel orders
-    $query = "INSERT INTO orders (nama, nomor, email, metode, alamat1, alamat2, kota, provinsi, negara, kode_pos, total_produk, total_harga) 
-              VALUES ('$nama', '$telepon', '$email', '$metode', '$alamat1', '$alamat2', '$kota', '$provinsi', '$negara', '$kode_pos', '$total_produk', '$total_price')";
+    $query = "INSERT INTO orders (nama, nomor, email, metode, alamat1, alamat2, kota, provinsi, negara, kode_pos, total_produk, total_harga, user_id) 
+              VALUES ('$nama', '$telepon', '$email', '$metode', '$alamat1', '$alamat2', '$kota', '$provinsi', '$negara', '$kode_pos', '$total_produk', '$total_price', '$user_id')";
     if (mysqli_query($connection, $query)) {
         $order_id = mysqli_insert_id($connection);
 
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_query($connection, $query);
 
         // Redirect ke halaman sukses
-        header('Location: sukses.php?order_id=' . $order_id);
+        header('Location: index.php?order_id=' . $order_id);
         exit();
     } else {
         $error_message = "Gagal memproses pesanan Anda. Silakan coba lagi.";

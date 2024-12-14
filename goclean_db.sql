@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 14, 2024 at 01:53 PM
+-- Generation Time: Dec 14, 2024 at 02:17 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -33,13 +33,6 @@ CREATE TABLE `cart` (
   `product_id` int NOT NULL,
   `kuantitas` int DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`id`, `user_id`, `product_id`, `kuantitas`) VALUES
-(57, 72, 34, 1);
 
 -- --------------------------------------------------------
 
@@ -71,8 +64,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `nama`, `nomor`, `email`, `metode`, `alamat1`, `alamat2`, `kota`, `provinsi`, `negara`, `kode_pos`, `total_produk`, `total_harga`, `status`, `user_id`, `product_id`) VALUES
-(24, 'ZULFIKA AJRUN NAFAD', 'asda', 'zanpro567@gmail.com', 'Transfer Bank', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Banyumas', 'Jawa Tengah', 'Indonesia', 53173, '1', '10000', 'pending', 73, 34),
-(25, 'ZULFIKA AJRUN NAFAD', '2423', 'zanpro567@gmail.com', 'Transfer Bank', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Banyumas', 'Jawa Tengah', 'Indonesia', 53173, '1', '10000', 'pending', 73, 33);
+(26, 'ZULFIKA AJRUN NAFAD', '2423', 'zanproject.id@gmail.com', 'Transfer Bank', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Banyumas', 'Jawa Tengah', 'Indonesia', 53173, '100', '1000000', 'pending', 76, 34);
 
 -- --------------------------------------------------------
 
@@ -92,8 +84,7 @@ CREATE TABLE `order_details` (
 --
 
 INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `kuantitas`) VALUES
-(22, 24, 34, 1),
-(23, 25, 33, 1);
+(24, 26, 34, 100);
 
 -- --------------------------------------------------------
 
@@ -134,14 +125,6 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `create_at`, `nama_depan`, `nama_belakang`, `nomer`) VALUES
-(72, 'nafad', 'nafad@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-12-14 08:03:31', 'ZULFIKA', 'NAFAD', '21312321'),
-(73, 'zul', 'ZUL@GMAIL.COM', '202cb962ac59075b964b07152d234b70', '2024-12-14 19:46:36', 'ZULFIKA', 'NAFAD', '1231312');
-
---
 -- Indexes for dumped tables
 --
 
@@ -158,7 +141,7 @@ ALTER TABLE `cart`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
+  ADD UNIQUE KEY `user_id` (`user_id`),
   ADD KEY `product_id` (`product_id`) USING BTREE;
 
 --
@@ -190,19 +173,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -214,7 +197,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- Constraints for dumped tables
@@ -232,7 +215,6 @@ ALTER TABLE `cart`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_orders_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --

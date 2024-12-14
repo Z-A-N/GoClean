@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 13, 2024 at 12:52 PM
+-- Generation Time: Dec 14, 2024 at 01:53 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -39,7 +39,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `user_id`, `product_id`, `kuantitas`) VALUES
-(43, 71, 34, 1);
+(57, 72, 34, 1);
 
 -- --------------------------------------------------------
 
@@ -61,15 +61,18 @@ CREATE TABLE `orders` (
   `kode_pos` int NOT NULL,
   `total_produk` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `total_harga` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `status` enum('pending','on_process','shipped','completed') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'pending'
+  `status` enum('pending','on_process','shipped','completed') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'pending',
+  `user_id` int NOT NULL,
+  `product_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `nama`, `nomor`, `email`, `metode`, `alamat1`, `alamat2`, `kota`, `provinsi`, `negara`, `kode_pos`, `total_produk`, `total_harga`, `status`) VALUES
-(13, 'ZULFIKA AJRUN NAFAD', '2423', 'Zulfikanafad@gmail.com', 'Transfer Bank', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Banyumas', 'Jawa Tengah', 'Indonesia', 53173, '1', '10000', 'pending');
+INSERT INTO `orders` (`id`, `nama`, `nomor`, `email`, `metode`, `alamat1`, `alamat2`, `kota`, `provinsi`, `negara`, `kode_pos`, `total_produk`, `total_harga`, `status`, `user_id`, `product_id`) VALUES
+(24, 'ZULFIKA AJRUN NAFAD', 'asda', 'zanpro567@gmail.com', 'Transfer Bank', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Banyumas', 'Jawa Tengah', 'Indonesia', 53173, '1', '10000', 'pending', 73, 34),
+(25, 'ZULFIKA AJRUN NAFAD', '2423', 'zanpro567@gmail.com', 'Transfer Bank', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Desa Tipar rt02/rw05 Kec. Rawalo Kab. Banyumas Jawa Tengah', 'Banyumas', 'Jawa Tengah', 'Indonesia', 53173, '1', '10000', 'pending', 73, 33);
 
 -- --------------------------------------------------------
 
@@ -89,7 +92,8 @@ CREATE TABLE `order_details` (
 --
 
 INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `kuantitas`) VALUES
-(9, 13, 34, 1);
+(22, 24, 34, 1),
+(23, 25, 33, 1);
 
 -- --------------------------------------------------------
 
@@ -124,9 +128,9 @@ CREATE TABLE `users` (
   `email` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `nama_depan` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `nama_belakang` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `nomer` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `nama_depan` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `nama_belakang` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `nomer` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -134,7 +138,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `create_at`, `nama_depan`, `nama_belakang`, `nomer`) VALUES
-(71, 'ZUL', 'ZUL@GMAIL.COM', '202cb962ac59075b964b07152d234b70', '2024-12-13 15:53:32', 'ZULFIKA', 'NAFAD', '082224142936');
+(72, 'nafad', 'nafad@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-12-14 08:03:31', 'ZULFIKA', 'NAFAD', '21312321'),
+(73, 'zul', 'ZUL@GMAIL.COM', '202cb962ac59075b964b07152d234b70', '2024-12-14 19:46:36', 'ZULFIKA', 'NAFAD', '1231312');
 
 --
 -- Indexes for dumped tables
@@ -152,7 +157,9 @@ ALTER TABLE `cart`
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `product_id` (`product_id`) USING BTREE;
 
 --
 -- Indexes for table `order_details`
@@ -183,19 +190,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -207,7 +214,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- Constraints for dumped tables
@@ -219,6 +226,14 @@ ALTER TABLE `users`
 ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `fk_orders_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --
 -- Constraints for table `order_details`
